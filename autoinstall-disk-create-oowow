@@ -54,6 +54,8 @@ cat <<EOF | CMD sfdisk -a $DISK
 2 : start=      131072, type=7
 EOF
 
+sync
+
 [ -e "$P2" ] || FAIL "2n oowow partition not found"
 
 # format 2n dumps partiotions
