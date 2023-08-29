@@ -2,13 +2,20 @@
 
 Create autoinstall image
 
-## USAGE
+## Download
 
-    [DISK=/dev/sdX] ./autoinstall-disk-create-oowow [IMAGE [DISK]]
+    cd
+    wget https://raw.githubusercontent.com/khadas/oowow-scripts-collection/main/autoinstall-disk-create-oowow
 
-## Headless
+## Build and Write Autoinstallation disk
 
-Remove installation disk for reboot
+    [DISK=/dev/sdX] bash ./autoinstall-disk-create-oowow [IMAGE [/dev/sdX]]
+
+## Headless usage
+
+All process can going in auto mode without any user action! After
+installation process will be done user must remove installation disk and
+reboot device! User can control all states by led indication.
 
 ## LED indication
 
@@ -16,8 +23,7 @@ Remove installation disk for reboot
 
 OOWOW version >= 230828
 
-* START : sys_led WHITE heartbeat
-* WRITE : sys_led WHITE blink      + mcu_led RED blink
-* ERROR : sys_led RED   solid      + mcu_led WHITE heartbeat
-* DONE  : sys_led WHITE slow blink + mcu_led WHITE solid
-
+    START          : sys_led WHITE heartbeat
+    WRITE/PROGRESS : sys_led WHITE blink      + mcu_led RED blink
+    ERROR          : sys_led RED   solid      + mcu_led WHITE heartbeat
+    DONE           : sys_led WHITE slow blink + mcu_led WHITE solid
