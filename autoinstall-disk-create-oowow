@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ## hyphop ##
 #= create universal OOWOW autoinstall disk
@@ -25,7 +25,7 @@ CMD(){
 }
 
 
-echo "Build $OOWOW autoinstall image for $IMAGE to $DISK"
+echo "Build $OOWOW autoinstall image for <$IMAGE> to $DISK"
 
 [ -s "$IMAGE" ] || FAIL "Undefined image name"
 [ -e "$DISK" ] || FAIL "Disk $DISK not found"
@@ -43,6 +43,9 @@ cd $WORK
 )
 
 #ls -l $WORK/$OOWOW
+
+echo "[i] PRESS ANY KEY TO CONTINUE or Ctrl + C for break"
+[ "$NO_WAIT" ] || read -n1
 
 CMD gzip -dc "$WORK/$OOWOW" > $DISK || FAIL oops
 sync
