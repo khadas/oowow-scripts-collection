@@ -1,0 +1,10 @@
+/bin
+/tmp
+/work
+.*
+*.img
+*.gz
+*.xz
+*.zst
+!README.md
+!.gitignore
