@@ -1,6 +1,6 @@
 # oowow-scripts-collection
 
-Create autoinstall image
+Create autoinstall image http://docs.khadas.com/software/oowow/how-to/oowow-autoinstall-disk
 
 ## Download
 
