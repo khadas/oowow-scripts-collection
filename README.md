@@ -4,6 +4,8 @@ Create autoinstall image
 
 ## Download
 
+https://raw.githubusercontent.com/khadas/oowow-scripts-collection/main/autoinstall-disk-create-oowow
+
     cd
     wget https://raw.githubusercontent.com/khadas/oowow-scripts-collection/main/autoinstall-disk-create-oowow
 
