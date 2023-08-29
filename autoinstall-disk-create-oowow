@@ -1,0 +1,78 @@
+#!/bin/sh
+
+## hyphop ##
+#= create universal OOWOW autoinstall disk
+
+DISK=${DISK:-$2}
+DISK=${DISK:-/dev/sda}
+
+BOARD=${BOARD:-edge2}
+VER=${VER:-230828.000}
+[ "$VER" ] && \
+OOWOW=${OOWOW:-$BOARD-oowow-$VER-sd.img.gz}
+DL=${DL:-http://dl.khadas.com/products/oowow/system/versions/$BOARD/}
+IMAGE=${IMAGE:-$1}
+WORK=~/oowow-autoinstall
+
+
+FAIL(){
+    echo "[fail] $@">&2
+    exit 1
+}
+CMD(){
+    echo "# $@">&2
+    sudo "$@" || FAIL
+}
+
+
+echo "Build $OOWOW autoinstall image for $IMAGE to $DISK"
+
+[ -s "$IMAGE" ] || FAIL "Undefined image name"
+[ -e "$DISK" ] || FAIL "Disk $DISK not found"
+
+mkdir -p "$WORK" || FAIL oops
+
+(
+cd $WORK
+[ -s $OOWOW.md5sum ] || {
+    echo "Download $OOWOW"
+    wget "$DL/$OOWOW" -O "$OOWOW" || FAIL download problem
+    md5sum $OOWOW > $OOWOW.md5sum
+}
+
+)
+
+#ls -l $WORK/$OOWOW
+
+CMD gzip -dc "$WORK/$OOWOW" > $DISK || FAIL oops
+sync
+
+P1=${DISK}1
+P2=${DISK}2
+
+cat <<EOF | CMD sfdisk -a $DISK
+2 : start=      131072, type=7
+EOF
+
+[ -e "$P2" ] || FAIL "2n oowow partition not found"
+
+# format 2n dumps partiotions
+CMD mkfs.exfat -n dumps $P2
+
+CMD mkdir -p /tmp/dumps /tmp/rescue
+# copy image
+
+CMD mount $P2 /tmp/dumps
+CMD cp $IMAGE /tmp/dumps
+
+ls -l1 /tmp/dumps
+
+# create config
+CMD mount $P1 /tmp/rescue
+C=/tmp/rescue/rescue/config
+CMD mkdir -p $C
+echo $IMAGE | CMD tee $C/autoinstall
+
+CMD umount $P1 $P2
+
+echo DONE
